@@ -7,13 +7,11 @@ class RandomVariable
   end
 
   def self.equiprobable(outcomes)
-    number_of_outcomes = outcomes.size
-    probability_of_individual_outcome = Rational(1) / number_of_outcomes
-    self.new(outcomes.each_with_object({}){|outcome, acc| acc[outcome] = probability_of_individual_outcome})
+    self.parts(Hash[outcomes.zip([1].cycle]))
   end
 
   def self.point_mass(outcome)
-    self.new(outcome => Rational(1))
+    self.parts(outcome => 1)
   end
 
   def self.parts(unnormalized_pmf)
