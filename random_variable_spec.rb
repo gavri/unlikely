@@ -2,22 +2,20 @@ require_relative 'random_variable'
 r = RandomVariable
 describe "Random Variable" do
 
-  it "should create random variable from array argument" do
-    r.build([6, 7, 8]).pmf.should == {6 => Rational(1, 3), 7 => Rational(1, 3), 8 => Rational(1, 3)}
-  end
-
   it "should create random variable from unnormalized pmf" do
     r.build(1 => 3, 2 => 7).pmf.should == {1 => Rational(3, 10), 2 => Rational(7, 10)}
   end
 
+  it "should create random variable of an uniform spread from array argument" do
+    r.build([6, 7, 8]).should == r.build(6 => 1, 7 => 1, 8 => 1)
+  end
+
   it "should operate probabilistically (new events are created through a single path each)" do
-    actual = r.build([100, 200]) + r.build([1, 2])
-    actual.should == r.build([101, 102, 201, 202])
+    r.build([100, 200]) + r.build([1, 2]).should == r.build([101, 102, 201, 202])
   end
 
   it "should operate probabilistically (new events are created through multiple paths)" do
-    actual = r.build([1, 2]) + r.build([3, 4])
-    actual.should == r.build(4 => 1, 5 => 2, 6 => 1)
+    r.build([1, 2]) + r.build([3, 4]).should == r.build(4 => 1, 5 => 2, 6 => 1)
   end
 
   it "should work with a probabilistic choice of function" do
