@@ -6,11 +6,8 @@ class RandomVariable
     self.pmf = pmf
   end
 
-  def self.equiprobable(outcomes)
-    self.parts(Hash[outcomes.zip([1].cycle)])
-  end
-
-  def self.parts(unnormalized_pmf)
+  def self.build(arg)
+    unnormalized_pmf = arg.kind_of?(Hash) ? arg : Hash[arg.zip([1].cycle)]
     total_number_of_parts = unnormalized_pmf.values.inject(:+)
     self.new(unnormalized_pmf.each_with_object({}) {|(outcome, number_of_parts), acc| acc[outcome] = Rational(number_of_parts, total_number_of_parts)})
   end
@@ -22,7 +19,7 @@ class RandomVariable
   end
 
   def method_missing(method_name, *args)
-    other_random_variables = args.map {|arg| arg.kind_of?(RandomVariable) ? arg : self.class.equiprobable([arg])}
+    other_random_variables = args.map {|arg| arg.kind_of?(RandomVariable) ? arg : self.class.build([arg])}
     other_pmls = other_random_variables.map(&:pml);
     cross = pml.product(*other_pmls);
     final_pmf = cross.each_with_object({}) do |point_masses, acc|
