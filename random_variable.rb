@@ -7,11 +7,7 @@ class RandomVariable
   end
 
   def self.equiprobable(outcomes)
-    self.parts(Hash[outcomes.zip([1].cycle]))
-  end
-
-  def self.point_mass(outcome)
-    self.parts(outcome => 1)
+    self.parts(Hash[outcomes.zip([1].cycle)])
   end
 
   def self.parts(unnormalized_pmf)
@@ -26,7 +22,7 @@ class RandomVariable
   end
 
   def method_missing(method_name, *args)
-    other_random_variables = args.map {|arg| arg.kind_of?(RandomVariable) ? arg : self.class.point_mass(arg)}
+    other_random_variables = args.map {|arg| arg.kind_of?(RandomVariable) ? arg : self.class.equiprobable([arg])}
     other_pmls = other_random_variables.map(&:pml);
     cross = pml.product(*other_pmls);
     final_pmf = cross.each_with_object({}) do |point_masses, acc|

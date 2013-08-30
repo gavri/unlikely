@@ -2,10 +2,6 @@ require_relative 'random_variable'
 r = RandomVariable
 describe "Random Variable" do
 
-  it "should create random variable from constructor point_mass" do
-    r.point_mass(5).pmf.should == {5 => 1}
-  end
-
   it "should create random variable from constructor equiprobable" do
     r.equiprobable([6, 7, 8]).pmf.should == {6 => Rational(1, 3), 7 => Rational(1, 3), 8 => Rational(1, 3)}
   end
