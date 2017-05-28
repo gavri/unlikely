@@ -6,10 +6,19 @@ class RandomVariable
     self.pmf = pmf
   end
 
+  def self.build_from_frequencies(arg)
+    raw_frequencies = arg.values
+    total_number_of_parts = raw_frequencies.reduce(:+)
+    new(arg.each_with_object({}) {|(outcome, number_of_parts), acc| acc[outcome] = Rational(number_of_parts, total_number_of_parts)})
+  end
+
+  def self.build_uniform(arg)
+    raw_frequencies = [1].cycle
+    build_from_frequencies(Hash[arg.zip(raw_frequencies)])
+  end
+
   def self.build(arg)
-    unnormalized_pmf = arg.kind_of?(Hash) ? arg : Hash[arg.zip([1].cycle)]
-    total_number_of_parts = unnormalized_pmf.values.inject(:+)
-    self.new(unnormalized_pmf.each_with_object({}) {|(outcome, number_of_parts), acc| acc[outcome] = Rational(number_of_parts, total_number_of_parts)})
+    arg.is_a?(Array) ? build_uniform(arg) : build_from_frequencies(arg)
   end
 
   def on_self(method_name, all_args)
