@@ -2,6 +2,8 @@ class RandomVariable
 
   attr_accessor :pmf
 
+  PointMass = Struct.new("PointMass", :outcome, :probability)
+
   def initialize(pmf)
     self.pmf = pmf
   end
@@ -61,5 +63,3 @@ module RandomVariableBuilders
     RandomVariable.build_from_raw(*args)
   end
 end
-
-PointMass = Struct.new("PointMass", :outcome, :probability)
