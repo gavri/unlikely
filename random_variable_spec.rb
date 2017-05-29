@@ -4,7 +4,7 @@ describe "Random Variable" do
   include RandomVariableBuilders
 
   it "should create random variable from unnormalized pmf" do
-    raw(1 => 3, 2 => 7).pmf.should == {1 => Rational(3, 10), 2 => Rational(7, 10)}
+    raw(1 => 3, 2 => 7).should == raw(1 => Rational(3, 10), 2 => Rational(7, 10))
   end
 
   it "should create random variable of an uniform spread from array argument" do

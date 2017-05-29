@@ -1,11 +1,9 @@
 class RandomVariable
 
-  attr_accessor :pmf
-
   PointMass = Struct.new("PointMass", :outcome, :probability)
 
   def initialize(pmf)
-    self.pmf = pmf
+    @pmf = pmf
   end
 
   def self.build_from_raw(arg)
@@ -45,11 +43,17 @@ class RandomVariable
   end
 
   def pml
-    self.pmf.map{|outcome, probability| PointMass.new(outcome, probability)}
+    pmf.map{|outcome, probability| PointMass.new(outcome, probability)}
   end
 
   def ==(other)
-    self.pmf == other.pmf
+    pmf == other.pmf
+  end
+
+  protected
+
+  def pmf
+    @pmf
   end
 
 end
